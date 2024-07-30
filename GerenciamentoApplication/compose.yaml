@@ -1,0 +1,27 @@
+version: '3.8'
+
+services:
+  mssql-server: 
+    container_name: sql-server-db
+    image: mcr.microsoft.com/mssql/server:2022-latest
+    ports:
+      - "1433:1433"
+    environment:
+      SA_PASSWORD: "SuperPassword@123"
+      ACCEPT_EULA: "Y"
+    volumes:
+      - C:\dados\volumes\sqlserver:/var/opt/mssql/data    
+
+  backend:
+    build:
+      context: .
+      dockerfile: GerenciamentoApplication/Dockerfile
+    ports:
+      - "44347:44347"
+    environment:
+      DB_CONNECTION: "Server=mssql-server;Database=gerenciamento;User Id=SA;Password=SuperPassword@123;"
+      DbServer: "mssql-server"
+      DbPort: "1433"
+      DbUser: "SA"
+      Password: "SuperPassword@123"
+      Database: "gerenciamento"

@@ -1,0 +1,28 @@
+version: '3.4'
+
+services:
+  gerenciamentoapplication:
+    image: ${DOCKER_REGISTRY-}gerenciamentoapplication
+    build:
+      context: .
+      dockerfile: GerenciamentoApplication/Dockerfile
+    environment:
+      DB_CONNECTION: sqlserver://db/volumesql
+      DbServer: "mssql-server"
+      DbPort: "1433"
+      DbUser: "SA"
+      Password: "SuperPassword@123"
+      Database: "gerenciamento"
+
+  mssql-server: 
+        container_name: sql-server-db
+        image: mcr.microsoft.com/mssql/server:2022-latest
+        ports:
+            - "1433:1433"
+        environment:
+            SA_PASSWORD: "SuperPassword@123"
+            ACCEPT_EULA: "Y"
+        volumes:
+            - sqlserver:/var/opt/mssql/data 
+volumes:
+  sqlserver:
